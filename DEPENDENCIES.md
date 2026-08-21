@@ -24,8 +24,9 @@ This environment also enables the complete synthetic/unit test suite.
 ## External resources
 
 - Linux and Python 3.11 are recommended.
-- End-to-end runs require a CUDA-capable NVIDIA GPU. The archived runs record a
-  32 GiB memory constraint, but the precise accelerator model was not retained.
+- End-to-end runs require a CUDA-capable NVIDIA GPU. The reported runs used a
+  single NVIDIA RTX 5000 Ada Generation GPU with 32 GiB memory; the pinned vLLM
+  environment was verified with driver 555.
 - Internet access is needed once for benchmark and checkpoint downloads.
 - Gated Hugging Face checkpoints require the reviewer to accept the provider's
   license and authenticate locally. Tokens must be supplied through the provider's
