@@ -1,9 +1,9 @@
-# Anonymous Review Artifact: Trustworthy Deferral for LLM Reasoning
+# Auditing the Judge: Internal Signals for LLM Reasoning Assurance
 
 This repository is the anonymous software and data artifact accompanying the
-manuscript *Trustworthy Deferral for LLM Reasoning*. It is a fresh snapshot with
-no upstream Git history, author metadata, credentials, model weights, or local
-machine paths.
+manuscript *Auditing the Judge: Internal Signals for LLM Reasoning Assurance*.
+It is a fresh snapshot with no upstream Git history, author metadata,
+credentials, model weights, or local machine paths.
 
 The release supports three levels of reproduction:
 
