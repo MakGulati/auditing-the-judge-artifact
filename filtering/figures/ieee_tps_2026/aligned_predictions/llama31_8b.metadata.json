@@ -1,0 +1,423 @@
+{
+  "elapsed_seconds": 57.888418674468994,
+  "n_test": 1307,
+  "n_train": 7443,
+  "primary_method": "raw_mlp_top32_5_seed_probability_ensemble",
+  "route": {
+    "k": 5,
+    "label_info": {
+      "dataset": "gsm8k",
+      "dump_meta": {
+        "assistant_prefill": "",
+        "dataset": "gsm8k",
+        "digest_version": 2,
+        "gen_run": {
+          "assistant_prefill": "",
+          "backend": "vllm",
+          "dataset": "gsm8k",
+          "extraction_assistant_prefill": "",
+          "extraction_tokenizer": "meta-llama/Llama-3.1-8B-Instruct",
+          "judge_max_tokens": 16,
+          "judge_prompt_sha256": "88a4d71dda5b92c1",
+          "k_samples": 5,
+          "mistral_format": false,
+          "model": "meta-llama/Llama-3.1-8B-Instruct",
+          "problems_sha256": "94c9587e95ab45c07fab5a0e3eb4222ce2a81279dcbef31c35f5bd5196232189",
+          "seed": 42,
+          "split": "test",
+          "tokenizer": null
+        },
+        "head_dim": 128,
+        "hidden_size": 4096,
+        "label_policy": "numeric_equivalence_v2",
+        "model": "meta-llama/Llama-3.1-8B-Instruct",
+        "n_heads": 32,
+        "n_layers": 32,
+        "o_proj_in": 4096,
+        "prompt_identity": {
+          "assistant_prefill": "",
+          "dataset": "gsm8k",
+          "extraction_assistant_prefill": "",
+          "extraction_tokenizer": "meta-llama/Llama-3.1-8B-Instruct",
+          "judge_prompt_sha256": "88a4d71dda5b92c1",
+          "mistral_format": false,
+          "model": "meta-llama/Llama-3.1-8B-Instruct",
+          "tokenizer": null
+        },
+        "store_resid": false
+      },
+      "exclusions": {
+        "n_analysed": 1308,
+        "n_excluded_error": 0,
+        "n_excluded_no_gold": 0,
+        "n_excluded_truncated": 11,
+        "n_generated": 1319,
+        "prevalence_analysed": 0.17507645259938837,
+        "prevalence_if_truncations_included": 0.1819560272934041,
+        "truncated_marked_wrong": 11
+      },
+      "n": 1308,
+      "n_dropped_unlabelable": 0,
+      "p_yes_check": {
+        "status": "no_topk_dump"
+      },
+      "paths": {
+        "hidden": "results_llama31_8b_k5_test/hidden_rich.npz",
+        "raw": "results_llama31_8b_k5_test/gsm8k/raw.jsonl"
+      },
+      "policy": "numeric_equivalence_v2",
+      "run_meta": {
+        "assistant_prefill": "",
+        "backend": "vllm",
+        "dataset": "gsm8k",
+        "gguf_file": null,
+        "judge_max_tokens": 16,
+        "k_samples": 5,
+        "kv_cache_dtype": null,
+        "label_policy": "numeric_equivalence_v2",
+        "max_model_len": 8192,
+        "mistral_format": false,
+        "model": "meta-llama/Llama-3.1-8B-Instruct",
+        "n_problems": 1319,
+        "problems_fingerprint_n": 64,
+        "problems_sha256": "94c9587e95ab45c07fab5a0e3eb4222ce2a81279dcbef31c35f5bd5196232189",
+        "quantization": null,
+        "seed": 42,
+        "solve_max_tokens": 2048,
+        "split": "test",
+        "tokenizer": null
+      },
+      "stored_disagreements": 0,
+      "stored_labelable_audit": {
+        "idx": [],
+        "n": 1319,
+        "n_disagree": 0,
+        "n_with_field": 1319,
+        "stored_false_recomputed_true": 0,
+        "stored_true_recomputed_false": 0
+      },
+      "unauthenticated": []
+    },
+    "n": 1308,
+    "wrong": 229
+  },
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "selected_flat_heads": [
+    484,
+    454,
+    576,
+    487,
+    849,
+    502,
+    438,
+    851,
+    490,
+    652,
+    449,
+    568,
+    455,
+    489,
+    450,
+    528,
+    531,
+    687,
+    491,
+    512,
+    486,
+    855,
+    549,
+    927,
+    600,
+    539,
+    914,
+    448,
+    518,
+    452,
+    475,
+    570
+  ],
+  "selected_head_train_lda_auc": [
+    0.7901044190278039,
+    0.7851263025859838,
+    0.7850941960931985,
+    0.7842821575411617,
+    0.7838007495682198,
+    0.783394635582783,
+    0.7830934596327623,
+    0.7830457260859667,
+    0.7829094392331113,
+    0.7821603824442077,
+    0.7812848885819462,
+    0.781121230707218,
+    0.7805527847789084,
+    0.7797766410963866,
+    0.7792090475528413,
+    0.7783585569769965,
+    0.7770969328165482,
+    0.776947954901648,
+    0.7761952044454328,
+    0.7760860991956139,
+    0.7754331724662294,
+    0.7750687306248207,
+    0.7750268690619562,
+    0.7749207945135212,
+    0.7748611275800266,
+    0.7744960227726903,
+    0.7743597359198349,
+    0.7742057384057677,
+    0.7729385263896429,
+    0.7727695647874929,
+    0.7725784411814735,
+    0.7723200738884998
+  ],
+  "software": {
+    "matplotlib": "3.11.1",
+    "numpy": "2.4.6",
+    "python": "3.11.2",
+    "scikit_learn": "1.9.0",
+    "scipy": "1.17.1"
+  },
+  "sources": [
+    {
+      "bytes": 1951694354,
+      "mtime_ns": 1786258087424215476,
+      "path": "results_llama31_8b_train/hidden_rich.npz"
+    },
+    {
+      "bytes": 18308570,
+      "mtime_ns": 1786257086958972836,
+      "path": "results_llama31_8b_train/gsm8k/raw.jsonl",
+      "sha256": "0fdc83be14b82eb67c6a2c9424052792aa12ae8a64e07e26c33267ae11b2c313"
+    },
+    {
+      "bytes": 342724702,
+      "mtime_ns": 1786258169260524129,
+      "path": "results_llama31_8b_test/hidden_rich.npz"
+    },
+    {
+      "bytes": 3366781,
+      "mtime_ns": 1786257652963657966,
+      "path": "results_llama31_8b_test/gsm8k/raw.jsonl",
+      "sha256": "12e8bc06856f91755a435c8326cc172dd18a62b6cb0a3c20ec5d589a39db19cf"
+    },
+    {
+      "bytes": 610369,
+      "mtime_ns": 1786309629521872859,
+      "path": "filtering/figures/paper/metrics_llama31_8b.json",
+      "sha256": "ced2717b407341f7da8293a88e818943f9bf0168c7599cf057076f5dd7e8115c"
+    },
+    {
+      "bytes": 342986920,
+      "mtime_ns": 1786307641353883106,
+      "path": "results_llama31_8b_k5_test/hidden_rich.npz"
+    },
+    {
+      "bytes": 8582978,
+      "mtime_ns": 1786307510409903413,
+      "path": "results_llama31_8b_k5_test/gsm8k/raw.jsonl",
+      "sha256": "75ab46e92eed9e3431a520b08e5371971485fb2db78b9c36b358eb741a799132"
+    }
+  ],
+  "tag": "llama31_8b",
+  "test_label_info": {
+    "dataset": "gsm8k",
+    "dump_meta": {
+      "assistant_prefill": "",
+      "dataset": "gsm8k",
+      "digest_version": 2,
+      "gen_run": {
+        "assistant_prefill": "",
+        "backend": "vllm",
+        "dataset": "gsm8k",
+        "extraction_assistant_prefill": "",
+        "extraction_tokenizer": "meta-llama/Llama-3.1-8B-Instruct",
+        "judge_max_tokens": 16,
+        "judge_prompt_sha256": "88a4d71dda5b92c1",
+        "k_samples": 1,
+        "mistral_format": false,
+        "model": "meta-llama/Llama-3.1-8B-Instruct",
+        "problems_sha256": "94c9587e95ab45c07fab5a0e3eb4222ce2a81279dcbef31c35f5bd5196232189",
+        "seed": 42,
+        "split": "test",
+        "tokenizer": null
+      },
+      "head_dim": 128,
+      "hidden_size": 4096,
+      "label_policy": "numeric_equivalence_v2",
+      "model": "meta-llama/Llama-3.1-8B-Instruct",
+      "n_heads": 32,
+      "n_layers": 32,
+      "o_proj_in": 4096,
+      "prompt_identity": {
+        "assistant_prefill": "",
+        "dataset": "gsm8k",
+        "extraction_assistant_prefill": "",
+        "extraction_tokenizer": "meta-llama/Llama-3.1-8B-Instruct",
+        "judge_prompt_sha256": "88a4d71dda5b92c1",
+        "mistral_format": false,
+        "model": "meta-llama/Llama-3.1-8B-Instruct",
+        "tokenizer": null
+      },
+      "store_resid": false
+    },
+    "exclusions": {
+      "n_analysed": 1307,
+      "n_excluded_error": 0,
+      "n_excluded_no_gold": 0,
+      "n_excluded_truncated": 12,
+      "n_generated": 1319,
+      "prevalence_analysed": 0.1782708492731446,
+      "prevalence_if_truncations_included": 0.18498862774829417,
+      "truncated_marked_wrong": 11
+    },
+    "n": 1307,
+    "n_dropped_unlabelable": 0,
+    "p_yes_check": {
+      "max_delta": 0.0,
+      "n": 1307,
+      "n_disagree": 0,
+      "status": "agrees"
+    },
+    "paths": {
+      "hidden": "results_llama31_8b_test/hidden_rich.npz",
+      "raw": "results_llama31_8b_test/gsm8k/raw.jsonl"
+    },
+    "policy": "numeric_equivalence_v2",
+    "run_meta": {
+      "assistant_prefill": "",
+      "backend": "vllm",
+      "dataset": "gsm8k",
+      "gguf_file": null,
+      "judge_max_tokens": 16,
+      "k_samples": 1,
+      "kv_cache_dtype": null,
+      "label_policy": "numeric_equivalence_v2",
+      "max_model_len": 8192,
+      "mistral_format": false,
+      "model": "meta-llama/Llama-3.1-8B-Instruct",
+      "n_problems": 1319,
+      "problems_fingerprint_n": 64,
+      "problems_sha256": "94c9587e95ab45c07fab5a0e3eb4222ce2a81279dcbef31c35f5bd5196232189",
+      "quantization": null,
+      "seed": 42,
+      "solve_max_tokens": 2048,
+      "split": "test",
+      "tokenizer": null
+    },
+    "stored_disagreements": 0,
+    "stored_labelable_audit": {
+      "idx": [],
+      "n": 1319,
+      "n_disagree": 0,
+      "n_with_field": 1319,
+      "stored_false_recomputed_true": 0,
+      "stored_true_recomputed_false": 0
+    },
+    "unauthenticated": []
+  },
+  "topk": 32,
+  "train_label_info": {
+    "dataset": "gsm8k",
+    "dump_meta": {
+      "assistant_prefill": "",
+      "dataset": "gsm8k",
+      "digest_version": 2,
+      "gen_run": {
+        "assistant_prefill": "",
+        "backend": "vllm",
+        "dataset": "gsm8k",
+        "extraction_assistant_prefill": "",
+        "extraction_tokenizer": "meta-llama/Llama-3.1-8B-Instruct",
+        "judge_max_tokens": 16,
+        "judge_prompt_sha256": "88a4d71dda5b92c1",
+        "k_samples": 1,
+        "mistral_format": false,
+        "model": "meta-llama/Llama-3.1-8B-Instruct",
+        "problems_sha256": "281c201f043580f72ebf9aec40e45d645517a06eb7437c963c7860ce93674a4f",
+        "seed": 42,
+        "split": "train",
+        "tokenizer": null
+      },
+      "head_dim": 128,
+      "hidden_size": 4096,
+      "label_policy": "numeric_equivalence_v2",
+      "model": "meta-llama/Llama-3.1-8B-Instruct",
+      "n_heads": 32,
+      "n_layers": 32,
+      "o_proj_in": 4096,
+      "prompt_identity": {
+        "assistant_prefill": "",
+        "dataset": "gsm8k",
+        "extraction_assistant_prefill": "",
+        "extraction_tokenizer": "meta-llama/Llama-3.1-8B-Instruct",
+        "judge_prompt_sha256": "88a4d71dda5b92c1",
+        "mistral_format": false,
+        "model": "meta-llama/Llama-3.1-8B-Instruct",
+        "tokenizer": null
+      },
+      "store_resid": false
+    },
+    "exclusions": {
+      "n_analysed": 7443,
+      "n_excluded_error": 0,
+      "n_excluded_no_gold": 0,
+      "n_excluded_truncated": 30,
+      "n_generated": 7473,
+      "prevalence_analysed": 0.10667741502082494,
+      "prevalence_if_truncations_included": 0.1101298006155493,
+      "truncated_marked_wrong": 29
+    },
+    "n": 7443,
+    "n_dropped_unlabelable": 0,
+    "p_yes_check": {
+      "max_delta": 0.0,
+      "n": 7443,
+      "n_disagree": 0,
+      "status": "agrees"
+    },
+    "paths": {
+      "hidden": "results_llama31_8b_train/hidden_rich.npz",
+      "raw": "results_llama31_8b_train/gsm8k/raw.jsonl"
+    },
+    "policy": "numeric_equivalence_v2",
+    "run_meta": {
+      "assistant_prefill": "",
+      "backend": "vllm",
+      "dataset": "gsm8k",
+      "gguf_file": null,
+      "judge_max_tokens": 16,
+      "k_samples": 1,
+      "kv_cache_dtype": null,
+      "label_policy": "numeric_equivalence_v2",
+      "max_model_len": 8192,
+      "mistral_format": false,
+      "model": "meta-llama/Llama-3.1-8B-Instruct",
+      "n_problems": 7473,
+      "problems_fingerprint_n": 64,
+      "problems_sha256": "281c201f043580f72ebf9aec40e45d645517a06eb7437c963c7860ce93674a4f",
+      "quantization": null,
+      "seed": 42,
+      "solve_max_tokens": 2048,
+      "split": "train",
+      "tokenizer": null
+    },
+    "stored_disagreements": 0,
+    "stored_labelable_audit": {
+      "idx": [],
+      "n": 7473,
+      "n_disagree": 0,
+      "n_with_field": 7473,
+      "stored_false_recomputed_true": 0,
+      "stored_true_recomputed_false": 0
+    },
+    "unauthenticated": []
+  },
+  "wrong_test": 233,
+  "wrong_train": 794
+}

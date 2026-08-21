@@ -1,0 +1,188 @@
+{
+  "cached_source_artifacts": [
+    {
+      "bytes": 23192,
+      "mtime_ns": 1786348287198532274,
+      "path": "filtering/figures/paper/route_compare.json",
+      "sha256": "0502f95e06e100c9d1b125b400c2c25183e46d04b2fdbd8883f519916713b7ff"
+    },
+    {
+      "bytes": 4755,
+      "mtime_ns": 1786313763248943643,
+      "path": "filtering/figures/paper/transfer_compare.json",
+      "sha256": "13c14314aea30347a9789ff3437b5eb9c69603d96353f491fdeea7d3e292cff0"
+    },
+    {
+      "bytes": 21401,
+      "mtime_ns": 1786362949805363299,
+      "path": "filtering/figures/paper/symbolic_compare.json",
+      "sha256": "ab2cde94519b118bada36cb44576a7916de0fa7e6e1495a5347f0fbf3d460f37"
+    },
+    {
+      "bytes": 6820,
+      "mtime_ns": 1786315347489105595,
+      "path": "filtering/figures/paper/level_breakdown.json",
+      "sha256": "069df84a4836ca432b5f72e56a29f84189833844344b30a459f207ab2252989f"
+    },
+    {
+      "bytes": 11039,
+      "mtime_ns": 1786302291529856709,
+      "path": "filtering/figures/sweep_defaults.json",
+      "sha256": "4bff43303cc0eac29e56e91571f4179cc6c8fef8ada92eb92f19c7684057bb0e"
+    },
+    {
+      "bytes": 11022,
+      "mtime_ns": 1786305900650731461,
+      "path": "filtering/figures/sweep_defaults_gemma3.json",
+      "sha256": "b0a7ac6df21c3da65a8ad9b224415f97590ef710820a048c52500421a8274e38"
+    },
+    {
+      "bytes": 11040,
+      "mtime_ns": 1786308256053751722,
+      "path": "filtering/figures/sweep_defaults_rest.json",
+      "sha256": "4e396d47431a05f52b55ae94a0423eb369c3511721c5c8e53651737e80b18153"
+    }
+  ],
+  "generated_outputs_before_manifest": [
+    {
+      "bytes": 3368,
+      "mtime_ns": 1786366663214338167,
+      "path": "filtering/figures/ieee_tps_2026/README.md",
+      "sha256": "aacb2f87a64da93c88f4a30d07edfd579c155987d93a044037a3ebcd328b4e86"
+    },
+    {
+      "bytes": 29261,
+      "mtime_ns": 1786366660674340206,
+      "path": "filtering/figures/ieee_tps_2026/fig1_selective_risk.pdf",
+      "sha256": "da6d3f179bd620870ebf2a6a76bc2ee7b1dd606f88df8900831fead83f033946"
+    },
+    {
+      "bytes": 450558,
+      "mtime_ns": 1786366660990339952,
+      "path": "filtering/figures/ieee_tps_2026/fig1_selective_risk.png",
+      "sha256": "90420a321b4a1ccc0dd2521cae32ce0ae2e05d33306232311fcc0df2cf4b15f1"
+    },
+    {
+      "bytes": 30651,
+      "mtime_ns": 1786366661262339734,
+      "path": "filtering/figures/ieee_tps_2026/fig2_discrimination.pdf",
+      "sha256": "9732bf35966906e6a6375215799b628cf8d18c6a91fa66daba43a86a61d87ab4"
+    },
+    {
+      "bytes": 209846,
+      "mtime_ns": 1786366661422339605,
+      "path": "filtering/figures/ieee_tps_2026/fig2_discrimination.png",
+      "sha256": "5b528591a274fa1fcfd9953fde1d33b8d93cfba8a9badbbda8c679e58a4d44fe"
+    },
+    {
+      "bytes": 24015,
+      "mtime_ns": 1786366661518339528,
+      "path": "filtering/figures/ieee_tps_2026/fig3_selective_routing.pdf",
+      "sha256": "557dfa06c12d0a25f0ed87a58bbbf74993fdfe393029b6e4469d9f30efacfc9e"
+    },
+    {
+      "bytes": 322593,
+      "mtime_ns": 1786366661630339438,
+      "path": "filtering/figures/ieee_tps_2026/fig3_selective_routing.png",
+      "sha256": "0a8ac1033477c410997cab18450cf36178c8e9ddc438f0a56c2c8fcc51cb76be"
+    },
+    {
+      "bytes": 39441,
+      "mtime_ns": 1786366661822339284,
+      "path": "filtering/figures/ieee_tps_2026/fig4_cross_dataset_transfer.pdf",
+      "sha256": "dc814945fccaa5e03a93ed92306496c5c54db6a4c629d421d9a62a04900f9cec"
+    },
+    {
+      "bytes": 392128,
+      "mtime_ns": 1786366662094339066,
+      "path": "filtering/figures/ieee_tps_2026/fig4_cross_dataset_transfer.png",
+      "sha256": "9004a96724dbc9166d72b3e07e3372bc91dd3a8d82806e3d81c38ce11cc25c15"
+    },
+    {
+      "bytes": 99920,
+      "mtime_ns": 1786366662310338892,
+      "path": "filtering/figures/ieee_tps_2026/figA1_risk_coverage.pdf",
+      "sha256": "ac434fba68c0756bb03f61a001444d80c156a07da90345584d1cef09695ff2b7"
+    },
+    {
+      "bytes": 741518,
+      "mtime_ns": 1786366662686338590,
+      "path": "filtering/figures/ieee_tps_2026/figA1_risk_coverage.png",
+      "sha256": "ca534ebaff7b32affcf735a483c8ff7b108824623c85f0579b2d9a95addcc356"
+    },
+    {
+      "bytes": 27300,
+      "mtime_ns": 1786366662766338526,
+      "path": "filtering/figures/ieee_tps_2026/figA2_probe_sensitivity.pdf",
+      "sha256": "75f5b036c8b51a59bfd121be5a6c24a0af133736d1856b0207761d0fcbed4222"
+    },
+    {
+      "bytes": 217223,
+      "mtime_ns": 1786366662926338397,
+      "path": "filtering/figures/ieee_tps_2026/figA2_probe_sensitivity.png",
+      "sha256": "76e9d8ae374c3fef78e80c4d3210ee6d4bb8df37a9cfff6b22a345f0b86a300d"
+    },
+    {
+      "bytes": 19972,
+      "mtime_ns": 1786366662978338356,
+      "path": "filtering/figures/ieee_tps_2026/figA3_symbolic_perturbation.pdf",
+      "sha256": "f721c5df67441bb1af4a022b67aa974fd8b772158fcfc3cd811740d70cef4946"
+    },
+    {
+      "bytes": 104037,
+      "mtime_ns": 1786366663050338298,
+      "path": "filtering/figures/ieee_tps_2026/figA3_symbolic_perturbation.png",
+      "sha256": "c7dd3bdd18046ff3d242e89a85d662901ba4a461f8d8fe75945351872bf9699e"
+    },
+    {
+      "bytes": 20592,
+      "mtime_ns": 1786366663130338234,
+      "path": "filtering/figures/ieee_tps_2026/figA4_math_level_breakdown.pdf",
+      "sha256": "313ba7caea73ef5c449cec4365a0bcf2740a7f8df305715ebe0aaab6fc4b8969"
+    },
+    {
+      "bytes": 186201,
+      "mtime_ns": 1786366663214338167,
+      "path": "filtering/figures/ieee_tps_2026/figA4_math_level_breakdown.png",
+      "sha256": "7f9b632b61cfdf33fa0523f90ff3c9f065c3e8754520f15f91732a7855f6bac2"
+    },
+    {
+      "bytes": 3214,
+      "mtime_ns": 1786366663214338167,
+      "path": "filtering/figures/ieee_tps_2026/figure_captions.md",
+      "sha256": "f87723748f172d582cbc63a5c3538d41e994e2955c3248a05d8f8dc16305f84b"
+    },
+    {
+      "bytes": 9474,
+      "mtime_ns": 1786366663214338167,
+      "path": "filtering/figures/ieee_tps_2026/fixed_budget_metrics.csv",
+      "sha256": "d6bc9753435c93ee21b9c30fb9ef4e946eec48e867a139c965a922d80466ee7b"
+    },
+    {
+      "bytes": 2124,
+      "mtime_ns": 1786366663214338167,
+      "path": "filtering/figures/ieee_tps_2026/main_metrics.csv",
+      "sha256": "c8f510ed8c1cd4cf54b26a0cfdb6a233be9f452ff0797a680d1ce043e26e50e3"
+    },
+    {
+      "bytes": 3387,
+      "mtime_ns": 1786366663214338167,
+      "path": "filtering/figures/ieee_tps_2026/paper_story.md",
+      "sha256": "473a1c89ff2e02fa5c9538aca49aa15c68785398e5a34b7279a21a2cb92e75b5"
+    },
+    {
+      "bytes": 4516655,
+      "mtime_ns": 1786359272508531881,
+      "path": "filtering/figures/ieee_tps_2026/statistics.json",
+      "sha256": "dfbe56b8123274f5bb51f3ac13fb948ae52c5bb919f753250b8b07e1a81d168b"
+    }
+  ],
+  "generated_utc_epoch": 1786366663.2217376,
+  "note": "Activation-dump paths and raw JSON hashes are recorded per run in aligned_predictions/*.metadata.json.",
+  "script": {
+    "bytes": 61128,
+    "mtime_ns": 1786366651734347380,
+    "path": "filtering/make_ieee_tps_figures.py",
+    "sha256": "0d1f08544fcbbdefc5c830796ea4d4e9135b6bb4bd5017ed342839d1d8b74dea"
+  }
+}

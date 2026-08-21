@@ -1,0 +1,35 @@
+# Self-judge pipeline — the env that runs generation (transformers backend) + the
+# white-box attention-head probe for the newer checkpoints:
+#   Ministral-3-8B-Instruct-2512 (mistral3, FP8 -> bf16)  and  Gemma3-12b (gemma3, bf16).
+# Verified 2026-06-23 on an RTX A5000 (driver 560 / CUDA 12.6).
+#
+#   conda create -n self_judge python=3.11 -y && conda activate self_judge
+#   pip install -r requirements.txt
+#
+# NOTE: vLLM is intentionally NOT in this env — it ships transformers 4.56, which can't parse
+# the mistral3/ministral3 config (needs the 5.12.1 pinned below). Ministral therefore uses
+# `run_eval.py --backend transformers`. For the FAST Gemma3 vLLM path use the SEPARATE
+# `requirements-vllm.txt` in its own conda env (verified vllm 0.10.2 on driver 555).
+
+# --- core: generation backend + probe extraction ---
+torch>=2.5,<2.8                 # verified: 2.6.0+cu124. Match the wheel to your driver's max CUDA.
+transformers==5.12.1            # MANDATORY for Ministral: text_config.model_type='ministral3'
+                                # doesn't exist in 4.5x (KeyError). Also serves Gemma3.
+mistral_common==1.11.3          # must match transformers 5.12 (provides ReasoningEffort import)
+accelerate>=1.0.0
+huggingface_hub>=0.24.0
+
+# --- data + tokenizers ---
+datasets>=2.0.0
+sentencepiece>=0.2.0            # tokenizer backend some Mistral/Gemma checkpoints need
+protobuf>=4.0.0
+
+# --- probe / filtering analysis ---
+numpy>=2.0
+scipy>=1.10.0
+scikit-learn>=1.5.0
+matplotlib>=3.5.0
+tqdm>=4.48.0
+
+# --- optional: only needed for `run_eval.py --backend api` (OpenAI-compatible endpoints) ---
+openai>=1.0.0

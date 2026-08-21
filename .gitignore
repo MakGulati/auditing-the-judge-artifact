@@ -1,0 +1,39 @@
+# Generated experiment data and large model-derived arrays
+logs/
+results*/
+filtering/figures/*
+!filtering/figures/paper/
+!filtering/figures/paper/*.json
+!filtering/figures/sweep_defaults*.json
+!filtering/figures/ieee_tps_2026/
+!filtering/figures/ieee_tps_2026/**
+filtering/figures/ieee_tps_2026/figure_captions.md
+filtering/figures/ieee_tps_2026/paper_story.md
+**/raw.jsonl
+*.npz
+!filtering/figures/ieee_tps_2026/aligned_predictions/*.npz
+
+# Generated manuscript snippets are intentionally not distributed
+paper/tables/
+
+# Python environments and caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.cache/
+.venv*/
+venv/
+*.egg-info/
+
+# Local secrets and tools
+.env
+.env.*
+!.env.example
+.vscode/
+.idea/
+.claude/
+.qwen/
+.swe-workflow.md
+
+# Figure reproduction rewrites these tracked deliverables
+.mplconfig/

@@ -1,0 +1,31 @@
+# Optional FAST-GENERATION env — vLLM in-process backend for the Gemma3 path.
+#
+# This is a SEPARATE env from the main requirements.txt (the transformers-backend stack that
+# pins transformers==5.12.1 for Ministral). vLLM 0.10.2 runs transformers 4.56, which CANNOT
+# parse the mistral3/ministral3 nested config, so:
+#   • Gemma3-12b  -> works here via `--backend vllm` (much faster than transformers). VERIFIED
+#                    2026-06-24 on an RTX 5000 Ada, driver 555 (the old "needs driver >=570"
+#                    claim is stale: torch cu128 runs on 555 via CUDA minor-version compat).
+#   • Ministral   -> does NOT load here (KeyError: 'ministral3'); keep it on the main env's
+#                    `--backend transformers`.
+#
+# Build it in its own conda env (do NOT mix with the self_judge env):
+#   conda create -n p311_vllm python=3.11 -y && conda activate p311_vllm
+#   pip install -r requirements-vllm.txt
+#
+# NOTE: torch 2.8.0 here is the cu128 build (vLLM 0.10.2 pulls it in). If pip grabs a wheel that
+# mismatches your driver, install torch explicitly first from the cu128 index:
+#   pip install "torch==2.8.0" --index-url https://download.pytorch.org/whl/cu128
+
+# --- vLLM generation backend (load-bearing, version-sensitive) ---
+vllm==0.10.2                    # provides its own torch 2.8.0+cu128 + transformers 4.56.1
+accelerate>=1.0.0               # REQUIRED by the extract_hidden_rich*.py device_map load
+                                # (vllm doesn't pull this in; verified accelerate 1.14.0)
+
+# --- probe / filtering analysis (same as main requirements.txt) ---
+numpy>=2.0
+scipy>=1.10.0
+scikit-learn>=1.5.0
+matplotlib>=3.5.0
+tqdm>=4.48.0
+datasets>=2.0.0
