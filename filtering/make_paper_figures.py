@@ -38,9 +38,9 @@ The run selection is always explicit: there is no default, so the same command
 produces the same figure on every machine.
 
 Compute once (slow: loads the activation dumps, fits LR+MLP):
-  python filtering/make_paper_figures.py --compute --runs gemma3,ministral
+  python filtering/make_paper_figures.py --compute --runs gemma3
 Re-plot from cache (fast):
-  python filtering/make_paper_figures.py --runs gemma3,ministral
+  python filtering/make_paper_figures.py --runs gemma3
 Everything registered, or just what is on this machine:
   python filtering/make_paper_figures.py --runs all
   python filtering/make_paper_figures.py --runs present
@@ -83,11 +83,6 @@ RUNS = {
                        train=ROOT / "results_llama31_8b_train", test=ROOT / "results_llama31_8b_test"),
     "qwen25_7b": dict(title="Qwen2.5-7B", head_dim=128,
                       train=ROOT / "results_qwen25_7b_train", test=ROOT / "results_qwen25_7b_test"),
-    "ministral": dict(title="Ministral-3-8B", head_dim=128,
-                      train=ROOT / "results_ministral_train", test=ROOT / "results_ministral_test"),
-    "deepseek14b": dict(title="R1-Distill-14B", head_dim=128,
-                        train=ROOT / "results_deepseek14b_train",
-                        test=ROOT / "results_deepseek14b_test"),
     # A MATH run is a separate entry, not a flag: it needs its own TAG (so its dumps
     # never share a path with the GSM8K run) and `dataset` picks both the raw.jsonl
     # subdirectory and the answer-equivalence policy the labels are recomputed under.

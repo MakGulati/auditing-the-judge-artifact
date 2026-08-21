@@ -62,9 +62,9 @@ def main():
     ap.add_argument("--topk", type=int, default=32)
     ap.add_argument("--label_policy", choices=("numeric", "stored"), default="numeric",
                     help="numeric equivalence (default) or legacy labels stored in the NPZ")
-    ap.add_argument("--head_dim", type=int, default=128,
-                    help="attention head_dim: 128 for Ministral-3-8B, 256 for Gemma3-12b. "
-                         "Verified against the dump's recorded geometry.")
+    ap.add_argument("--head_dim", type=int, default=256,
+                    help="attention head_dim (default: 256 for Gemma 3 12B IT). "
+                         "The value is verified against the dump's recorded geometry.")
     ap.add_argument("--models", default="lr",
                     help="comma-separated probe models to compare: lr,mlp (default: lr)")
     ap.add_argument("--seed", type=int, default=0)
@@ -77,11 +77,11 @@ def main():
                          "estimate spread from data sampling + head selection + init. "
                          "Dominates runtime (a full per-head LDA sweep per replicate); "
                          "0 skips it")
-    ap.add_argument("--title", default="Ministral-3-8B")
+    ap.add_argument("--title", default="Gemma 3 12B IT")
     ap.add_argument("--dataset_label", default=None,
                     help="dataset name shown in the figure title. Derived from the raw "
                          "records by default, so a figure cannot be mislabelled.")
-    ap.add_argument("--out", default="filtering/figures/ministral_train_test_probe.png")
+    ap.add_argument("--out", default="filtering/figures/gemma3_train_test_probe.png")
     ap.add_argument("--allow_split_mismatch", action="store_true",
                     help="downgrade the train/test provenance check to a warning. Only "
                          "for deliberate cross-run comparisons; the reported AUC then "

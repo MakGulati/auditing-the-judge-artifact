@@ -79,7 +79,9 @@ def run_fingerprint(args: argparse.Namespace, examples: list[dict]) -> dict:
         "kv_cache_dtype": args.kv_cache_dtype or None,
         # how the prompt was templated and how much the model was allowed to say
         "tokenizer": args.tokenizer or None,
-        "mistral_format": bool(args.mistral_format),
+        # Retained as a false-valued compatibility field because the archived
+        # submission metadata fingerprints this schema version.
+        "mistral_format": False,
         "assistant_prefill": args.assistant_prefill,
         "judge_max_tokens": args.judge_max_tokens,
         "solve_max_tokens": args.solve_max_tokens,
@@ -95,7 +97,7 @@ def run_fingerprint(args: argparse.Namespace, examples: list[dict]) -> dict:
 #
 #   - quantization / kv_cache_dtype / gguf_file change the weights, so they change the
 #     generated text even though nothing about the problem set moved.
-#   - tokenizer / mistral_format / assistant_prefill change how the prompt is
+#   - tokenizer / assistant_prefill change how the prompt is
 #     templated, and extraction reproduces that templating from the model id alone.
 #   - judge_max_tokens changes the judge's reply budget, which changes verdicts;
 #     max_model_len can truncate a prompt.
@@ -421,18 +423,13 @@ def build_backend(args: argparse.Namespace) -> LLMBackend:
             max_num_seqs=args.max_num_seqs or None,
             quantization=args.quantization or None,
             kv_cache_dtype=args.kv_cache_dtype or None,
-            mistral_format=args.mistral_format,
             assistant_prefill=args.assistant_prefill,
         )
 
     # API backend (default)
     from openai import AsyncOpenAI
-    api_key = (
-        os.environ.get("MISTRAL_API_KEY")
-        or os.environ.get("OPENAI_API_KEY")
-        or "dummy"
-    )
-    base_url = os.environ.get("OPENAI_BASE_URL", "https://api.mistral.ai/v1")
+    api_key = os.environ.get("OPENAI_API_KEY") or "dummy"
+    base_url = os.environ.get("OPENAI_BASE_URL", "https://api.openai.com/v1")
     client = AsyncOpenAI(api_key=api_key, base_url=base_url)
     semaphore = asyncio.Semaphore(args.max_concurrent)
     return APIBackend(client, args.model, semaphore)
@@ -448,7 +445,7 @@ async def main() -> None:
     parser.add_argument("--k_samples", type=int, default=5)
     parser.add_argument(
         "--model",
-        default="mistralai/Ministral-3-8B-Instruct-2512-GGUF",
+        default="google/gemma-3-12b-it",
         help="HF repo ID (vllm backend) or model name for the API backend",
     )
     parser.add_argument("--output_dir", default="./results")
@@ -458,8 +455,8 @@ async def main() -> None:
     parser.add_argument(
         "--backend", default="vllm", choices=["vllm", "api", "transformers"],
         help="'vllm' runs the model in-process (GGUF/safetensors); 'api' calls an "
-             "OpenAI-compatible HTTP endpoint; 'transformers' loads FP8->bf16 via HF "
-             "(use for mistral3 checkpoints vLLM/GGUF can't load)",
+             "OpenAI-compatible HTTP endpoint; 'transformers' is a slower in-process "
+             "Hugging Face fallback",
     )
 
     # vLLM-specific args
@@ -467,8 +464,8 @@ async def main() -> None:
         "--gguf-file",
         default="",
         help="Filename of a .gguf quant within the HF repo to load (vllm backend only). "
-             "Empty (default) loads the repo's HF safetensors — correct for the gemma3 / "
-             "mistral3 checkpoints. Only set this for an actual GGUF repo+file.",
+             "Empty (default) loads the repo's HF safetensors. Only set this for an "
+             "actual GGUF repository and filename.",
     )
     parser.add_argument(
         "--tokenizer",
@@ -499,22 +496,13 @@ async def main() -> None:
                              "must also hold the judge prompt containing the whole "
                              "solution) for harder datasets.")
     parser.add_argument("--judge_max_tokens", type=int, default=16,
-                        help="max tokens for the judge reply. Raise (e.g. 96) for "
-                             "justification-first judges like no-think DeepSeek-R1 "
-                             "distills, whose YES/NO arrives at the END of the reply.")
+                        help="max tokens for the judge reply. Raise it for "
+                             "justification-first judges whose YES/NO arrives at the "
+                             "end of the reply.")
     parser.add_argument("--assistant_prefill", default="",
                         help="text appended after the chat template's generation prompt, "
-                             "as if the assistant had already written it. Use "
-                             "'\\n</think>\\n\\n' to close the think block reasoning "
-                             "templates (DeepSeek-R1 distills) force open, i.e. thinking "
-                             "OFF. vllm backend only.")
-    parser.add_argument("--mistral-format", action="store_true", dest="mistral_format",
-                        help="load a native mistral safetensors repo (params.json + "
-                             "tekken.json) via vllm's mistral config/load/tokenizer path, "
-                             "templating with mistral_common. Required for Ministral-3-8B-"
-                             "2512, whose 'ministral3' text_config the bundled transformers "
-                             "can't parse.")
-
+                             "as if the assistant had already written it. vLLM backend "
+                             "only.")
     # API-specific args
     parser.add_argument("--max_concurrent", type=int, default=8,
                         help="Max simultaneous requests (api backend only)")

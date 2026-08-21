@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Rich activation extraction for any standard CausalLM judge (generalizes the
-Ministral/Gemma3 extractors to flat-config text models, e.g. Qwen2 / Llama).
+"""Rich activation extraction for the reported flat-config CausalLM judges
+(Qwen2.5 and Llama 3.1), parallel to the Gemma 3 extractor.
 
 Differences from extract_hidden_rich_gemma3.py:
   - AutoModelForCausalLM (not AutoModelForImageTextToText) — for plain text LMs
-    like Qwen2ForCausalLM (DeepSeek-R1-Distill-Qwen) / LlamaForCausalLM.
+    like Qwen2ForCausalLM / LlamaForCausalLM.
   - config may be FLAT (no .text_config); we fall back to the top-level config.
   - optional FP8->bf16 dequantize if the checkpoint is FP8 (bf16 loads as-is).
 
@@ -12,8 +12,8 @@ o_proj INPUT dim = n_heads * head_dim (== hidden_size for Qwen2/Llama; may diffe
 for archs like Gemma3) -> Z_head sized to that. Outputs match the other extractors:
   Z_head (N,nL,Dh) f16 | X_last/X_mean (N,nL+1,H) f32 (--store_resid) | y maj p_yes idx meta
 
-  python extract_hidden_rich_causal.py --model deepseek-ai/DeepSeek-R1-Distill-Qwen-14B \
-    --input results_x/gsm8k/raw.jsonl --out results_x/hidden_rich.npz
+  python extract_hidden_rich_causal.py --model Qwen/Qwen2.5-7B-Instruct \
+    --input results_qwen25_7b/gsm8k/raw.jsonl --out results_qwen25_7b/hidden_rich.npz
 """
 from __future__ import annotations
 import argparse
@@ -39,8 +39,7 @@ def main():
     ap.add_argument("--out", required=True)
     ap.add_argument("--assistant_prefill", default="",
                     help="text appended after the generation prompt, matching the "
-                         "--assistant_prefill used at generation time (e.g. "
-                         "'\\n</think>\\n\\n' for thinking-off DeepSeek-R1 distills), "
+                         "--assistant_prefill used at generation time, "
                          "so activations are read at the same position that emitted "
                          "the verdict")
     add_common_args(ap)

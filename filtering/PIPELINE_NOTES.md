@@ -58,21 +58,20 @@ the dataset off the records rather than being hardcoded.
 ## Environment
 
 ```bash
-conda activate self_judge      # from `pip install -r requirements.txt` (see top-level README)
-PY=python                      # torch>=2.5, transformers==5.12.1, mistral_common==1.11.3
+conda activate p311_vllm       # from `pip install -r requirements-vllm.txt`
+PY=python
 ```
 
-Generation uses `run_eval.py --backend transformers` (FP8→bf16 for Ministral, native bf16 for
-Gemma3) — the `--backend vllm` GGUF path can't load `mistral3`. Download the full safetensors
-checkpoint first (see the top-level README Setup callout).
+Generation uses `run_eval.py --backend vllm`. Gemma 3 12B IT is the canonical
+end-to-end example because it is a reported checkpoint and is also used in the
+additional routing experiment. Download the full safetensors checkpoint first
+(see the top-level README setup notes).
 
 ## Per-model variables
 
 ```bash
-# Ministral:
-MODEL=mistralai/Ministral-3-8B-Instruct-2512 ; EXTRACT=extract_hidden_rich.py ; HEAD_DIM=128 ; TAG=ministral
-# Gemma3 (gated — huggingface-cli login first):
-# MODEL=google/gemma-3-12b-it ; EXTRACT=extract_hidden_rich_gemma3.py ; HEAD_DIM=256 ; TAG=gemma3
+# Gemma 3 (gated — huggingface-cli login first):
+MODEL=google/gemma-3-12b-it ; EXTRACT=extract_hidden_rich_gemma3.py ; HEAD_DIM=256 ; TAG=gemma3
 TRAIN=results_${TAG}_train ; TEST=results_${TAG}_test
 ```
 
@@ -101,8 +100,8 @@ $PY "$EXTRACT" --input "$TRAIN/gsm8k/raw.jsonl" --out "$TRAIN/hidden_rich.npz"
 $PY "$EXTRACT" --input "$TEST/gsm8k/raw.jsonl"  --out "$TEST/hidden_rich.npz"
 ```
 
-**D. Fit probe on TRAIN, evaluate on held-out TEST** (`--head_dim` must match the model:
-128 Ministral / 256 Gemma3):
+**D. Fit probe on TRAIN, evaluate on held-out TEST** (`--head_dim 256` for the
+canonical Gemma 3 configuration):
 
 ```bash
 $PY filtering/train_test_probe.py \
@@ -175,27 +174,6 @@ MPLCONFIGDIR=/tmp $PY filtering/train_test_probe.py \
   --test_hidden  "$TEST/hidden_rich.npz"  --test_raw  "$TEST/gsm8k/raw.jsonl" \
   --head_dim "$HEAD_DIM" --title "$TAG" --models lr,mlp \
   --out "filtering/figures/${TAG}_probe_compare.png"
-```
-
-## Ministral via the vLLM fast path
-
-Ministral-3-8B-2512 now generates on the vLLM backend (no transformers-5 env needed for
-generation): its `ministral3` text_config can't be parsed by the transformers bundled
-with vLLM 0.10, but the repo ships the native mistral format (`params.json` +
-`tekken.json` + `consolidated.safetensors`), loaded with the new `--mistral-format`
-flag (FP8 weights, ~10 GB; prompts templated via `mistral_common`, ~4 rec/s at
-`--max_concurrent 48`):
-
-```bash
-# p311_vllm env:
-GSM8K_SPLIT=train $PY run_eval.py --backend vllm --model mistralai/Ministral-3-8B-Instruct-2512 \
-  --mistral-format --n_problems 7473 --k_samples 1 --max_concurrent 48 --output_dir results_ministral_train
-GSM8K_SPLIT=test $PY run_eval.py --backend vllm --model mistralai/Ministral-3-8B-Instruct-2512 \
-  --mistral-format --n_problems 1319 --k_samples 1 --max_concurrent 48 --output_dir results_ministral_test
-
-# extraction still needs the transformers==5.12.1 env (self_judge; ~8 rec/s):
-$PY extract_hidden_rich.py --input results_ministral_train/gsm8k/raw.jsonl --out results_ministral_train/hidden_rich.npz
-$PY extract_hidden_rich.py --input results_ministral_test/gsm8k/raw.jsonl  --out results_ministral_test/hidden_rich.npz
 ```
 
 ## Paper figures

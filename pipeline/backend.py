@@ -2,7 +2,7 @@
 LLM backend abstraction.
 
 Two implementations:
-  APIBackend   – calls any OpenAI-compatible HTTP endpoint (Mistral AI, vLLM server, Ollama)
+  APIBackend   – calls any OpenAI-compatible HTTP endpoint
   VLLMBackend  – runs inference in-process via vLLM's AsyncLLMEngine (GGUF or HF safetensors)
 """
 from __future__ import annotations
@@ -119,8 +119,7 @@ class VLLMBackend(LLMBackend):
     Parameters
     ----------
     model       HuggingFace repo ID that contains the GGUF file(s).
-    gguf_file   Filename of the specific .gguf file inside the repo
-                (e.g. 'Ministral-3-8B-Instruct-2512-Q4_K_M.gguf').
+    gguf_file   Filename of the specific .gguf file inside the repo.
                 If omitted, the model is treated as a standard HF safetensors repo.
     tokenizer   HF repo ID for the tokenizer. Defaults to `model` (works when the
                 GGUF repo also hosts tokenizer.json / tokenizer_config.json).
@@ -140,18 +139,11 @@ class VLLMBackend(LLMBackend):
         max_num_seqs: int | None = None,
         quantization: str | None = None,
         kv_cache_dtype: str | None = None,
-        mistral_format: bool = False,
         assistant_prefill: str = "",
     ) -> None:
         from vllm import AsyncEngineArgs, AsyncLLMEngine
 
-        if mistral_format and gguf_file:
-            raise ValueError("--mistral_format is for native safetensors repos, not GGUF")
-        if mistral_format and assistant_prefill:
-            raise ValueError("--assistant_prefill needs the HF chat-template path, "
-                             "not --mistral_format")
-        # e.g. "\n</think>\n\n" closes the think block that reasoning templates
-        # (DeepSeek-R1 distills) force open, disabling chain-of-thought.
+        # Optional assistant-side text appended after the rendered chat template.
         self._prefill = assistant_prefill
 
         model_path = model
@@ -168,7 +160,7 @@ class VLLMBackend(LLMBackend):
 
         # GGUF forces its own quant; otherwise honor an explicit --quantization (e.g. "fp8":
         # online weight quant that ~halves weight VRAM, freeing KV cache for a much larger
-        # context — e.g. DeepSeek-R1-Distill-Qwen-14B goes 4k -> 32k on a 32 GB card).
+        # context on memory-constrained GPUs).
         quant = "gguf" if is_gguf else quantization
 
         # max_num_seqs caps the engine's max concurrent sequences AND the sampler
@@ -189,24 +181,10 @@ class VLLMBackend(LLMBackend):
         if kv_cache_dtype is not None:
             engine_kwargs["kv_cache_dtype"] = kv_cache_dtype   # e.g. "fp8" ~halves KV -> more ctx
 
-        # Native mistral checkpoints (e.g. Ministral-3-8B-2512: text_config
-        # model_type 'ministral3') can't be parsed by the transformers config/
-        # tokenizer that vLLM<=0.10 ships. Their repos carry params.json +
-        # tekken.json + consolidated.safetensors, so load via vLLM's mistral
-        # format and template prompts with mistral_common instead of an HF
-        # tokenizer (prompts go to the engine pre-tokenized).
-        self._mtok = None
-        if mistral_format:
-            engine_kwargs["config_format"] = "mistral"
-            engine_kwargs["load_format"] = "mistral"
-            engine_kwargs["tokenizer_mode"] = "mistral"
-            from mistral_common.tokens.tokenizers.mistral import MistralTokenizer
-            self._mtok = MistralTokenizer.from_hf_hub(tokenizer_id)
         engine_args = AsyncEngineArgs(**engine_kwargs)
         self._engine = AsyncLLMEngine.from_engine_args(engine_args)
-        if not mistral_format:
-            from transformers import AutoTokenizer
-            self._tok = AutoTokenizer.from_pretrained(tokenizer_id)
+        from transformers import AutoTokenizer
+        self._tok = AutoTokenizer.from_pretrained(tokenizer_id)
 
     async def chat_complete(
         self,
@@ -227,15 +205,9 @@ class VLLMBackend(LLMBackend):
         from vllm import SamplingParams
         from vllm.utils import random_uuid
 
-        if self._mtok is not None:
-            from mistral_common.protocol.instruct.request import ChatCompletionRequest
-            toks = self._mtok.encode_chat_completion(
-                ChatCompletionRequest(messages=messages)).tokens
-            prompt = {"prompt_token_ids": toks}
-        else:
-            prompt = self._tok.apply_chat_template(
-                messages, tokenize=False, add_generation_prompt=True
-            ) + self._prefill
+        prompt = self._tok.apply_chat_template(
+            messages, tokenize=False, add_generation_prompt=True
+        ) + self._prefill
         params = SamplingParams(
             temperature=temperature,
             # top_p is ignored when temperature=0; set 1.0 to avoid vLLM warning
@@ -264,14 +236,10 @@ class VLLMBackend(LLMBackend):
 # ── transformers backend ─────────────────────────────────────────────────────
 
 class TransformersBackend(LLMBackend):
-    """In-process generation via plain `transformers`, for models vLLM can't load.
+    """In-process generation via plain `transformers` as a vLLM fallback.
 
-    Needed for the new **mistral3** multimodal checkpoints (e.g.
-    Ministral-3-8B-Instruct-2512): their GGUF architecture isn't supported by the
-    transformers/vLLM GGUF loader, and the pinned vLLM 0.6 predates mistral3
-    safetensors support. This backend loads the FP8 weights and dequantizes to
-    bf16 — the exact load path `extract_hidden_rich.py` uses — so generation and
-    activation extraction share identical weights.
+    This backend loads compatible image-text checkpoints in bf16 and dequantizes
+    supported FP8 checkpoints when necessary.
 
     Concurrent `chat_complete` calls are coalesced by a micro-batcher (grouped by
     sampling params) into batched `model.generate` calls, recovering most of the
@@ -291,7 +259,7 @@ class TransformersBackend(LLMBackend):
             AutoConfig, AutoModelForImageTextToText, AutoTokenizer, FineGrainedFP8Config,
         )
 
-        # mistral3 FP8 dequant references this dtype on some transformers builds
+        # Some FP8 dequantization paths reference this dtype on older GPUs.
         torch.float8_e8m0fnu = getattr(torch, "float8_e8m0fnu", torch.float8_e4m3fn)
         self._torch = torch
 
@@ -308,8 +276,8 @@ class TransformersBackend(LLMBackend):
             self._tok.pad_token = self._tok.eos_token
         self._tok.padding_side = "left"
 
-        # FP8 checkpoints (e.g. Ministral-3-8B-2512) must be dequantized to bf16 to run on
-        # GPUs without native FP8 (Ampere); bf16 checkpoints (e.g. Gemma3-12b) load as-is.
+        # FP8 checkpoints must be dequantized to bf16 on GPUs without native FP8;
+        # bf16 checkpoints such as Gemma 3 load as-is.
         # Detect from the model config so the same backend serves both.
         cfg = AutoConfig.from_pretrained(model)
         qc = getattr(cfg, "quantization_config", None)

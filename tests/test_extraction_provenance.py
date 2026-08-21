@@ -176,13 +176,12 @@ class PrepareExtractionTests(unittest.TestCase):
         self.assertEqual(gen["problems_sha256"], "abc123")
         self.assertEqual(len(gen["judge_prompt_sha256"]), 16)
 
-    def test_mistral_format_generation_cannot_be_extracted(self):
-        """It templates with mistral_common; every extractor uses AutoTokenizer, which
-        tokenizes the same conversation differently."""
+    def test_legacy_native_format_generation_cannot_be_extracted(self):
+        """A legacy native-tokenizer run cannot be reproduced by AutoTokenizer."""
         self.write_meta(mistral_format=True)
         with self.assertRaises(SystemExit) as cm:
             prepare_extraction(self.parser, self.args())
-        self.assertIn("mistral", str(cm.exception).lower())
+        self.assertIn("legacy native-tokenizer", str(cm.exception).lower())
 
     def test_a_custom_generation_tokenizer_is_adopted(self):
         self.write_meta(tokenizer="other/tok")

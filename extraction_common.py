@@ -1,7 +1,7 @@
-"""Shared machinery for the `extract_hidden_rich*.py` activation extractors.
+"""Shared machinery for the activation extractors used by the reported models.
 
-The three extractors differ only in how they load a model (mistral3 FP8 dequantize /
-gemma3 bf16 / flat-config CausalLM). Everything after that — hooking o_proj, sizing
+The extractors differ only in how they load a model (Gemma 3 image-text architecture
+or flat-config Qwen/Llama CausalLM). Everything after that — hooking o_proj, sizing
 the dump, resuming, labelling, saving — is identical and lives here so a fix lands
 once instead of three times.
 """
@@ -92,10 +92,9 @@ def prepare_extraction(ap, args) -> dict:
     loaded so a mismatch costs a second rather than a checkpoint load.
 
     The mismatches this catches are all silent: generation may have used a different
-    tokenizer (``--tokenizer``), a different tokenization path entirely
-    (``--mistral_format``, which templates with ``mistral_common`` and cannot be
-    reproduced by ``AutoTokenizer``), or an assistant prefill. Every one of them moves
-    the last token, which is exactly where the activation is read.
+    tokenizer, a legacy tokenization path that cannot be reproduced by
+    ``AutoTokenizer``, or an assistant prefill. Every one of them moves the last token,
+    which is exactly where the activation is read.
     """
     if args.limit < 0:
         ap.error(f"--limit must be >= 0 (got {args.limit})")
@@ -122,10 +121,8 @@ def prepare_extraction(ap, args) -> dict:
                 f"{args.model!r}: different weights and possibly a different template")
         if meta.get("mistral_format"):
             problems.append(
-                "generation ran --mistral-format, which templates the prompt with "
-                "mistral_common from params.json/tekken.json. No extractor can "
-                "reproduce that: they all template with AutoTokenizer, which tokenizes "
-                "the same conversation differently")
+                "generation used an unsupported legacy native-tokenizer path. No "
+                "reported-model extractor can reproduce it with AutoTokenizer")
         gen_tok = meta.get("tokenizer")
         if gen_tok and args.tokenizer and gen_tok != args.tokenizer:
             problems.append(
@@ -186,7 +183,7 @@ def find_snapshots(model: str) -> list[str]:
 
     Requires tokenizer_config.json, not just tokenizer.json: the config is what carries
     bos/eos/pad and the chat template, and a snapshot with only the raw tokenizer.json
-    (e.g. left by a mistral-format vLLM load) cannot reproduce generation's prompt.
+    cannot reproduce generation's prompt.
     Returns every candidate rather than just the newest, because the most recently
     fetched revision can be the partial one while an older revision is complete.
     """
@@ -251,10 +248,8 @@ def load_tokenizer(model: str):
         "        read at a different prompt than the one that produced the verdict.\n"
         f"\n        Installed transformers is {transformers.__version__}. A "
         f"'does not exist or is not currently imported'\n"
-        "        or KeyError above usually means this env is too old for the "
-        "checkpoint\n"
-        "        (Ministral/mistral3 needs transformers==5.12.1 — see requirements.txt);\n"
-        "        run extraction in the env that matches the model, not the vLLM env.\n"
+        "        or KeyError above usually means this environment is too old for the "
+        "checkpoint; run extraction in the environment documented for that model.\n"
         "        Otherwise fetch the full checkpoint (tokenizer_config.json + chat "
         "template)."
     )

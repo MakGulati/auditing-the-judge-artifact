@@ -198,7 +198,8 @@ class TestSelectionSlug(unittest.TestCase):
     selection silently replaces a figure a draft already cites."""
 
     def test_slug_names_the_runs(self):
-        self.assertEqual(F.selection_slug(["gemma3", "ministral"]), "gemma3+ministral")
+        self.assertEqual(F.selection_slug(["gemma3", "llama31_8b"]),
+                         "gemma3+llama31_8b")
 
     def test_different_selections_differ(self):
         self.assertNotEqual(F.selection_slug(["a", "b"]), F.selection_slug(["a"]))

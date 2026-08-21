@@ -3,20 +3,18 @@
 # activations -> run the probe. Verifies the whole pipeline wires up, in ~3-5 min on a GPU.
 # Not a results run (n=8 is far too small for meaningful AUC) — it just proves the chain works.
 #
-#   ./smoke_test.sh                 # Ministral via transformers (default)
-#   BACKEND=vllm MODEL=google/gemma-3-12b-it EXTRACT=extract_hidden_rich_gemma3.py \
-#     HEAD_DIM=256 ./smoke_test.sh   # Gemma3 fast path
+#   ./smoke_test.sh                 # Gemma 3 12B IT via vLLM (default)
 #   DATASET=math ./smoke_test.sh     # same wiring check against Hendrycks MATH
 #
 set -euo pipefail
 cd "$(dirname "$0")"
 
-export MODEL=${MODEL:-mistralai/Ministral-3-8B-Instruct-2512}   # extractors read MODEL
+export MODEL=${MODEL:-google/gemma-3-12b-it}                    # extractors read MODEL
 export DATASET=${DATASET:-gsm8k}                                # extractors read DATASET
-EXTRACT=${EXTRACT:-extract_hidden_rich.py}
-HEAD_DIM=${HEAD_DIM:-128}
+EXTRACT=${EXTRACT:-extract_hidden_rich_gemma3.py}
+HEAD_DIM=${HEAD_DIM:-256}
 PY=${PY:-python3}
-BACKEND=${BACKEND:-transformers}
+BACKEND=${BACKEND:-vllm}
 # Cap context: Gemma3-12b advertises max_model_len=131072; with ~23 GiB of weights on a
 # 32 GiB card the leftover KV cache can't serve one full-length request, so vLLM aborts at
 # init ("estimated maximum model length is 3856"). 4096 is plenty for GSM8K.
@@ -61,7 +59,7 @@ GEN_EXTRA=()
 echo ">>> [1/3] generate $N_SMOKE + $N_SMOKE $DATASET records ($MODEL, backend=$BACKEND)"
 rm -rf "$OUT"
 GEN_ARGS=(--backend "$BACKEND" --model "$MODEL" --dataset "$DATASET" \
-          --solve_max_tokens "${SOLVE_MAX_TOKENS:-1024}")
+          --solve_max_tokens "${SOLVE_MAX_TOKENS:-2048}")
 if [ "$BACKEND" = "vllm" ]; then
   GEN_ARGS+=(--max-model-len "$MAX_MODEL_LEN" --gpu-memory-utilization "$GPU_MEM")
   # ${arr[@]+"${arr[@]}"} so an empty array doesn't trip `set -u` on older bash

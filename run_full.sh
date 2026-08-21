@@ -6,19 +6,7 @@
 # The probe only needs solve_correct + judge activations (not the k-sample majority), so this
 # runs with k=1 to keep generation fast.
 #
-#   ./run_full.sh                  # Ministral via transformers (default)
-#
-#   # Gemma3-12b (gemma3 arch, head_dim 256, its own extractor):
-#   MODEL=google/gemma-3-12b-it EXTRACT=extract_hidden_rich_gemma3.py HEAD_DIM=256 TAG=gemma3 ./run_full.sh
-#
-#   # A 14B (Qwen3 / DeepSeek-R1-Distill-Qwen) needs fp8 + a capped warmup to fit a 32 GiB card:
-#   QUANT=fp8 MAX_NUM_SEQS=16 GPU_MEM=0.95 MAX_MODEL_LEN=8192 \
-#     MODEL=Qwen/Qwen3-14B EXTRACT=extract_hidden_rich_causal.py HEAD_DIM=128 TAG=qwen3_14b ./run_full.sh
-#
-#   # Ministral-3-8B (mistral3): needs the transformers backend + a transformers-5.x env:
-#   PY=<transformers-5.x python> BACKEND=transformers \
-#     MODEL=mistralai/Ministral-3-8B-Instruct-2512 EXTRACT=extract_hidden_rich.py \
-#     HEAD_DIM=128 TAG=ministral ./run_full.sh
+#   ./run_full.sh                  # Gemma 3 12B IT on GSM8K (default)
 #
 #   # Hendrycks MATH instead of GSM8K (LaTeX answers, \boxed{} output contract):
 #   DATASET=math TAG=gemma3_math BACKEND=vllm MODEL=google/gemma-3-12b-it \
@@ -28,15 +16,12 @@
 #   dump records which dataset it came from) rather than mixing two datasets.
 #
 # Backends (BACKEND=, generation only — steps 1-2):
-#   vllm          default; much faster. Works for Qwen/Gemma in the 'p311_vllm' env (vllm 0.10.2,
-#                 torch cu128 — runs fine on driver 555 via CUDA minor-version compat).
-#                 NOT usable for Ministral there: vLLM's transformers 4.56 can't parse the
-#                 'ministral3' nested config (needs transformers 5.x, untested vs this vLLM).
-#   transformers  the in-process path for the mistral3 Ministral checkpoint. Needs the
-#                 transformers-5.12 env (e.g. conda 'self_judge').
+#   vllm          default; verified for the reported Gemma, Qwen, and Llama checkpoints
+#                 with vLLM 0.10.2 and torch cu128 on driver 555.
+#   transformers  slower in-process fallback for compatible Hugging Face checkpoints.
 #
-# Extractor: use extract_hidden_rich_causal.py for flat-config CausalLMs (Qwen2/Qwen3/Llama),
-#   extract_hidden_rich_gemma3.py for gemma3, extract_hidden_rich.py for mistral3/Ministral.
+# Extractor: use extract_hidden_rich_causal.py for flat-config CausalLMs (Qwen/Llama)
+#   and extract_hidden_rich_gemma3.py for Gemma 3.
 # Pick PY to match the backend's env: the default vLLM path uses the p311_vllm python (it also
 # has the sklearn/scipy/matplotlib stack, so extract + probe run there too).
 #
@@ -51,11 +36,11 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
-export MODEL=${MODEL:-mistralai/Ministral-3-8B-Instruct-2512}   # all extractors read MODEL
+export MODEL=${MODEL:-google/gemma-3-12b-it}                    # all extractors read MODEL
 export DATASET=${DATASET:-gsm8k}                                # all extractors read DATASET
-EXTRACT=${EXTRACT:-extract_hidden_rich.py}
-HEAD_DIM=${HEAD_DIM:-128}
-TAG=${TAG:-ministral}
+EXTRACT=${EXTRACT:-extract_hidden_rich_gemma3.py}
+HEAD_DIM=${HEAD_DIM:-256}
+TAG=${TAG:-gemma3}
 PY=${PY:-python3}
 
 # Per-dataset split env var and full-split sizes. Each loader owns the name of the env
@@ -68,7 +53,7 @@ esac
 N_TRAIN=${N_TRAIN:-$FULL_TRAIN}
 N_TEST=${N_TEST:-$FULL_TEST}
 # Forwarded to BOTH generation and extraction so activations are read at the same
-# position that emitted the verdict (e.g. '\n</think>\n\n' for thinking-off R1 distills).
+# position that emitted the verdict.
 PREFILL=${PREFILL:-}
 
 # HEAD_DIM must match the model's attention head_dim. The extractors record the true
@@ -88,11 +73,11 @@ fi
 # GSM8K; it truncated 24% of MATH. Run calibrate_solve_budget.py to size it, and
 # keep MAX_MODEL_LEN above (longest problem + SOLVE_MAX_TOKENS), because the
 # judge prompt embeds the whole solution.
-SOLVE_MAX_TOKENS=${SOLVE_MAX_TOKENS:-1024}
-BACKEND=${BACKEND:-transformers}
+SOLVE_MAX_TOKENS=${SOLVE_MAX_TOKENS:-2048}
+BACKEND=${BACKEND:-vllm}
 GGUF_FILE=${GGUF_FILE:-}                 # empty = load HF safetensors (not a .gguf quant)
 GPU_MEM=${GPU_MEM:-0.92}
-MAX_MODEL_LEN=${MAX_MODEL_LEN:-4096}
+MAX_MODEL_LEN=${MAX_MODEL_LEN:-8192}
 MAX_CONCURRENT=${MAX_CONCURRENT:-32}
 MAX_NUM_SEQS=${MAX_NUM_SEQS:-}           # empty = vLLM default; set low (e.g. 16) for a
                                          # ~14B model on a 32 GiB card (sampler-warmup OOM)

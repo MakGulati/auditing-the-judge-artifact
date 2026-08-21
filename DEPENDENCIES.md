@@ -7,18 +7,11 @@ SciPy, scikit-learn, matplotlib, and pytest. This environment is sufficient for
 all checked-in artifact verification, table generation, and figure reproduction.
 It runs the CPU-safe analysis subset of the tests through `make verify`.
 
-## Transformers generation/extraction environment
+## GPU generation and extraction environment
 
-Use `requirements-ministral-extraction.txt`. The pinned Transformers and
-`mistral_common` versions are required for the verified Ministral configuration.
-PyTorch wheels must match the host's supported CUDA version.
-This environment also enables the complete synthetic/unit test suite.
-
-## vLLM generation environment
-
-Use `requirements-vllm.txt` in a separate environment. vLLM pins a Transformers
-line that is incompatible with the verified Ministral configuration. The file
-records the verified package versions and backend constraints.
+Use `requirements-vllm.txt`. It records the package versions verified for the
+reported Gemma 3, Qwen2.5, and Llama 3.1 pipelines. PyTorch wheels must match the
+host's supported CUDA version.
 This environment also enables the complete synthetic/unit test suite.
 
 ## External resources

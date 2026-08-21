@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Rich activation extraction for gemma3-family judges (mirror of extract_hidden_rich.py).
+"""Rich activation extraction for Gemma 3-family judges.
 
-Differences from the Ministral extractor:
+Architecture-specific behavior:
   - AutoModelForImageTextToText with a bf16-native checkpoint (no FP8 dequantize).
   - gemma3's o_proj INPUT dim = n_heads*head_dim, which is NOT hidden_size
     (gemma-3-12b: 16 heads * 256 head_dim = 4096 vs hidden 3840) -> Z_head sized to Dh.
@@ -15,7 +15,7 @@ Outputs:
   X_last/X_mean (N,nL+1,H) f32 residual stream  (--store_resid; off by default)
   y, maj, p_yes, idx, meta
 
-Run with torch + transformers on a CUDA GPU (see requirements.txt).
+Run with the GPU environment documented in requirements-vllm.txt.
 """
 from __future__ import annotations
 import argparse

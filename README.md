@@ -40,22 +40,22 @@ make statistics
 
 ## End-to-end reproduction
 
-The default Transformers path uses the separately pinned environment in
-`requirements-ministral-extraction.txt`:
+The canonical end-to-end path uses Gemma 3 12B IT, the study's standard
+checkpoint and one of the two models used in the additional routing experiment.
+Install the verified vLLM environment:
 
 ```bash
 python3.11 -m venv .venv-model
 source .venv-model/bin/activate
-python -m pip install -r requirements-ministral-extraction.txt
+python -m pip install -r requirements-vllm.txt
 ./run_full.sh
 ```
 
-The vLLM path for Gemma, Qwen, and Llama-family checkpoints must use a separate
-environment because its verified Transformers version conflicts with the
-Ministral stack. See [DEPENDENCIES.md](DEPENDENCIES.md) and the comments in
-`requirements-vllm.txt`.
+`run_full.sh` defaults to the reported Gemma 3/GSM8K configuration. Qwen2.5 and
+Llama 3.1 use the same vLLM environment with their model-specific extractor and
+head dimension; see [DEPENDENCIES.md](DEPENDENCIES.md).
 
-Once either complete model environment is installed, run all 363 tests with:
+Once the complete model environment is installed, run all 363 tests with:
 
 ```bash
 make test-full
