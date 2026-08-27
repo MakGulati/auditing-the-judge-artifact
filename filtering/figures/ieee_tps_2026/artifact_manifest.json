@@ -1,16 +1,16 @@
 {
   "cached_source_artifacts": [
     {
-      "bytes": 23192,
-      "mtime_ns": 1786348287198532274,
+      "bytes": 31881,
+      "mtime_ns": 1787323417090292028,
       "path": "filtering/figures/paper/route_compare.json",
-      "sha256": "0502f95e06e100c9d1b125b400c2c25183e46d04b2fdbd8883f519916713b7ff"
+      "sha256": "daa211ad06614cf4a793e8aa9ee3a86deaedff751300114fc2ff7869b6ee7171"
     },
     {
-      "bytes": 4755,
-      "mtime_ns": 1786313763248943643,
+      "bytes": 32881,
+      "mtime_ns": 1787323417094292035,
       "path": "filtering/figures/paper/transfer_compare.json",
-      "sha256": "13c14314aea30347a9789ff3437b5eb9c69603d96353f491fdeea7d3e292cff0"
+      "sha256": "ef0823580316ec1b7cd39a9e7bc73ad5961403e4d13e9d4385e33b3e46ff85c0"
     },
     {
       "bytes": 21401,

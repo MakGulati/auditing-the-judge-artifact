@@ -67,6 +67,10 @@ def main() -> int:
         target = ROOT / "filtering/figures/ieee_tps_2026" / Path(record["path"]).name
         if target.is_file() and record.get("sha256") and sha256(target) != record["sha256"]:
             failures.append(f"manifest hash mismatch: {target.relative_to(ROOT)}")
+    for record in manifest.get("cached_source_artifacts", []):
+        target = ROOT / record["path"]
+        if target.is_file() and record.get("sha256") and sha256(target) != record["sha256"]:
+            failures.append(f"manifest hash mismatch: {target.relative_to(ROOT)}")
 
     if failures:
         print("release audit FAILED", file=sys.stderr)

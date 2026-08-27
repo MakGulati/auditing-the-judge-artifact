@@ -12,7 +12,9 @@
 #   pip install "torch==2.8.0" --index-url https://download.pytorch.org/whl/cu128
 
 # --- vLLM generation backend (load-bearing, version-sensitive) ---
-vllm==0.10.2                    # provides its own torch 2.8.0+cu128 + transformers 4.56.1
+vllm==0.10.2                    # provides its own torch 2.8.0+cu128
+transformers==4.56.1            # pinned: vllm's own bound (>=4.55.2) is open-ended and will
+                                # silently resolve a newer, unverified transformers otherwise
 accelerate>=1.0.0               # REQUIRED by the extract_hidden_rich*.py device_map load
                                 # (vllm doesn't pull this in; verified accelerate 1.14.0)
 
