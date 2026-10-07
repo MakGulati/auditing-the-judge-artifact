@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fail on common anonymity, secret, archive, and hosting mistakes."""
+"""Fail on common secret, archive, and hosting mistakes."""
 
 from __future__ import annotations
 

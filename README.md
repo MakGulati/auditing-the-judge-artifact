@@ -1,9 +1,16 @@
 # Auditing the Judge: Internal Signals for LLM Reasoning Assurance
 
-This repository is the anonymous software and data artifact accompanying the
-manuscript *Auditing the Judge: Internal Signals for LLM Reasoning Assurance*.
-It is a fresh snapshot with no upstream Git history, author metadata,
-credentials, model weights, or local machine paths.
+Public software and data artifact for the accepted IEEE TPS-ISA 2026 paper
+*Auditing the Judge: Internal Signals for LLM Reasoning Assurance*, by
+**Mayank Gulati and Gerhard Wunder**, Freie Universität Berlin.
+
+- [Fixed camera-ready release](https://github.com/MakGulati/auditing-the-judge-artifact/releases/tag/tps2026-v1)
+- [Supplementary material (PDF)](https://github.com/MakGulati/auditing-the-judge-artifact/releases/download/tps2026-v1/supplement.pdf)
+- The arXiv identifier and IEEE publication DOI will be added when available.
+
+The supplement contains the proofs, uncertainty protocol, baseline audits,
+population accounting, robustness analyses, and reproducibility details removed
+from the 12-page camera-ready paper. The main paper links to this fixed release.
 
 The release supports three levels of reproduction:
 
@@ -82,8 +89,8 @@ with Hugging Face. No credentials are stored here.
 See [ARTIFACTS.md](ARTIFACTS.md) for the provenance and inclusion policy.
 
 The manuscript itself is deliberately excluded: this repository contains no
-paper sections, bibliography, compiled manuscript PDF, or checked-in LaTeX table
-fragments. The table generator is retained as analysis code, but its output is
+paper sections, bibliography, compiled main-paper PDF, or checked-in LaTeX table
+fragments. The separate supplementary PDF is included under `supplement/`. The table generator is retained as analysis code, but its output is
 ignored by Git.
 
 ## Scope and limitations
@@ -95,5 +102,13 @@ terms. Their hashes, run settings, exclusions, and software versions are retaine
 in the metadata. Hardware-dependent numerical variation and known limitations are
 documented in the artifact package.
 
-During anonymous review, please do not attempt to identify the authors from model
-hosting logs, repository traffic, or other external metadata.
+## License and citation
+
+The authors' software code and its software documentation are released under
+[MIT](LICENSE). The paper, supplementary PDF, research figures, and cached or
+derived research data are outside that code license; no additional reuse license
+is granted for those materials. Upstream datasets and model checkpoints retain
+their provider terms. See [LICENSES.md](LICENSES.md) for scope.
+
+Please cite the paper when using the artifact in research. Citation metadata is
+provided in [CITATION.cff](CITATION.cff).

@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+message: "Please cite the accompanying paper when using this research artifact."
+type: software
+title: "Auditing the Judge: Internal Signals for LLM Reasoning Assurance — Research Artifact"
+authors:
+  - family-names: Gulati
+    given-names: Mayank
+    affiliation: Freie Universität Berlin
+  - family-names: Wunder
+    given-names: Gerhard
+    affiliation: Freie Universität Berlin
+repository-code: "https://github.com/MakGulati/auditing-the-judge-artifact"
+url: "https://github.com/MakGulati/auditing-the-judge-artifact/releases/tag/tps2026-v1"
+version: tps2026-v1
+date-released: 2026-10-07
+license: MIT
+preferred-citation:
+  type: conference-paper
+  title: "Auditing the Judge: Internal Signals for LLM Reasoning Assurance"
+  authors:
+    - family-names: Gulati
+      given-names: Mayank
+    - family-names: Wunder
+      given-names: Gerhard
+  year: 2026
+  conference:
+    name: IEEE TPS-ISA 2026

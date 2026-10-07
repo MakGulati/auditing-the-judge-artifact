@@ -2,6 +2,8 @@
 
 ## Included
 
+- Standalone supplementary PDF accompanying the accepted camera-ready paper.
+
 - Complete generation, judging, activation-extraction, probe-fitting, routing,
   transfer, symbolic-perturbation, and plotting source used by the study.
 - Dependency manifests for CPU analysis, Transformers extraction, and vLLM.
@@ -54,6 +56,6 @@ Run:
 make audit
 ```
 
-This checks tracked-file anonymity patterns, rejects oversized files, verifies the
+This checks for credentials and local workstation paths, rejects oversized files, verifies the
 portable NumPy archives can be loaded without pickle, and validates the archived
 manifest entries whose targets are included in this release.
